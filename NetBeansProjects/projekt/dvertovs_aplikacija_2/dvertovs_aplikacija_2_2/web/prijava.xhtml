@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.vazeciJezik}">
+        <h:head>
+            <title>#{m.index_prijava}</title>
+        </h:head>
+        <h1>#{m.index_prijava}</h1>
+        <h:body>
+            <h:form>
+                <h:commandLink value="#{m.index_registracija}" action="registracija"/><br/>
+                <h:commandLink value="#{m.index_naslov}" action="odabirjezika"/><br/><br/>
+                <br/>
+                #{m.korime} <br/><h:inputText value="#{prijavaBean.username}" size="50"/><br/>
+                #{m.lozinka}<br/> <h:inputText value="#{prijavaBean.password}" size="50"/><br/><br/>
+                <h:commandButton value="#{m.index_prijava}" action="#{prijavaBean.login()}"/>
+                <br/><br/><br/><br/>
+                #{prijavaBean.message}
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+

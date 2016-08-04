@@ -1,0 +1,116 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package nwtis.dvertovs.rest.klijenti;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.ws.rs.ServerErrorException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import nwtis.dvertovs.web.podaci.MeteoPodaci;
+
+/**
+ *
+ * @author nwtis_1
+ */
+public class OWMKlijent {
+
+    String apiKey;
+    OWMRESTHelper helper;
+    Client client;
+
+    public OWMKlijent(String apiKey) {
+        this.apiKey = apiKey;
+        helper = new OWMRESTHelper(apiKey);
+        client = ClientBuilder.newClient();
+    }
+
+    public MeteoPodaci getRealTimeWeather(String latitude, String longitude) {
+        WebTarget webResource = client.target(OWMRESTHelper.getOWM_BASE_URI())
+                .path(OWMRESTHelper.getOWM_Current_Path());
+        webResource = webResource.queryParam("lat", latitude);
+        webResource = webResource.queryParam("lon", longitude);
+        webResource = webResource.queryParam("lang", "hr");
+        webResource = webResource.queryParam("units", "metric");
+        webResource = webResource.queryParam("APIKEY", apiKey);
+
+        String odgovor = webResource.request(MediaType.APPLICATION_JSON).get(String.class);
+        try {
+            JsonReader reader = Json.createReader(new StringReader(odgovor));
+
+            JsonObject jo = reader.readObject();
+
+            MeteoPodaci mp = new MeteoPodaci();
+            try {
+                mp.setTemperatureValue(new Double(jo.getJsonObject("main").getJsonNumber("temp").doubleValue()).floatValue());
+                mp.setTemperatureMin(new Double(jo.getJsonObject("main").getJsonNumber("temp_min").doubleValue()).floatValue());
+                mp.setTemperatureMax(new Double(jo.getJsonObject("main").getJsonNumber("temp_max").doubleValue()).floatValue());
+
+                mp.setHumidityValue(new Double(jo.getJsonObject("main").getJsonNumber("humidity").doubleValue()).floatValue());
+                mp.setPressureValue(new Double(jo.getJsonObject("main").getJsonNumber("pressure").doubleValue()).floatValue());
+                mp.setWindSpeedValue(new Double(jo.getJsonObject("wind").getJsonNumber("speed").doubleValue()).floatValue());
+                mp.setWindDirectionValue(new Double(jo.getJsonObject("wind").getJsonNumber("deg").doubleValue()).floatValue());
+            } catch (NullPointerException n) {
+
+            }
+            mp.setWeatherValue(jo.getJsonArray("weather").getJsonObject(0).getString("description"));
+            mp.setLastUpdate(new Date(jo.getJsonNumber("dt").bigDecimalValue().longValue() * 1000));
+            mp.setPreuzeto(new Date());
+            return mp;
+
+        } catch (Exception ex) {
+            Logger.getLogger(OWMKlijent.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public List<MeteoPodaci> getWeatherForecast(String latitude, String longitude) {
+        WebTarget webResource = client.target(OWMRESTHelper.getOWM_BASE_URI())
+                .path(OWMRESTHelper.getOWM_Forecast_Path());
+        webResource = webResource.queryParam("lat", latitude);
+        webResource = webResource.queryParam("lon", longitude);
+        webResource = webResource.queryParam("lang", "hr");
+        webResource = webResource.queryParam("units", "metric");
+        webResource = webResource.queryParam("APIKEY", apiKey);
+        List<MeteoPodaci> meteoPodaciLista = new ArrayList<>();
+        try {
+            String odgovor = webResource.request(MediaType.APPLICATION_JSON).get(String.class);
+
+            JsonReader reader = Json.createReader(new StringReader(odgovor));
+            JsonObject jo = reader.readObject();
+            JsonArray meteoDataArray = jo.getJsonArray("list");
+
+            Date preuzeto = new Date();
+            for (int i = 0; i < meteoDataArray.size(); i++) {
+                JsonObject mainObj = meteoDataArray.getJsonObject(i).getJsonObject("main");
+                JsonArray weatherObj = meteoDataArray.getJsonObject(i).getJsonArray("weather");
+
+                MeteoPodaci mp = new MeteoPodaci();
+                mp.setWeatherValue(weatherObj.getJsonObject(0).getString("description"));
+                mp.setTemperatureValue(new Double(mainObj.getJsonNumber("temp").doubleValue()).floatValue());
+                mp.setHumidityValue(new Double(mainObj.getJsonNumber("humidity").doubleValue()).floatValue());
+                mp.setPressureValue(new Double(mainObj.getJsonNumber("pressure").doubleValue()).floatValue());
+                mp.setLastUpdate(new Date(meteoDataArray.getJsonObject(i).getJsonNumber("dt").bigDecimalValue().longValue() * 1000));
+                mp.setPreuzeto(preuzeto);
+
+                meteoPodaciLista.add(mp);
+            }
+        } catch (ServerErrorException ex) {
+            System.out.println("greska pri preuzimanju adresa");
+        }
+        return meteoPodaciLista;
+    }
+}

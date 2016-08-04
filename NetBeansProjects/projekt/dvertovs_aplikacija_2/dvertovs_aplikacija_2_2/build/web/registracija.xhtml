@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.vazeciJezik}">
+        <h:head>
+            <title>#{m.index_registracija}</title>
+        </h:head>
+        <h1>#{m.index_registracija}</h1>
+        <h:body>
+            <h:form>
+                <h:commandLink value="#{m.index_prijava}" action="prijava"/><br/>
+                <h:commandLink value="#{m.index_naslov}" action="odabirjezika"/><br/><br/>
+                <br/>
+                #{m.korime} <br/><h:inputText value="#{registracijaBean.username}" size="50"/><br/>
+                #{m.lozinka} <br/><h:inputText value="#{registracijaBean.password}" size="50"/><br/>
+                #{m.lozinka_ponovi} <br/><h:inputText value="#{registracijaBean.passwordRepeat}" size="50"/><br/>
+                #{m.tip_kor} <br/><br/>
+                <h:selectOneRadio value="#{registracijaBean.type}">
+                    <f:selectItem itemLabel="#{m.admin}" itemValue="ADMIN"/>
+                    <f:selectItem itemLabel="#{m.obicni}" itemValue="OBICNI"/>
+                </h:selectOneRadio><br/>
+                <br/>
+                <h:commandButton value="#{m.index_registracija}" action="#{registracijaBean.register()}"/>
+                <br/><br/><br/><br/>
+                #{registracijaBean.message}
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+

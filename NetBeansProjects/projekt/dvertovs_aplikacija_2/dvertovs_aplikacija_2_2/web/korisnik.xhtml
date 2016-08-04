@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.vazeciJezik}">
+        <h:head>
+            <title>#{m.korisnik}</title>
+            <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4__J9z5JMrKBEi9H6f6dMen_CUFE0aPs"></script>
+
+        </h:head>
+        <h1>#{m.korisnik}</h1>
+        <h:body>
+            <ui:composition template="./predlozak.xhtml">
+
+                <ui:define name="naslov">
+                    NWTiS - Pregled adresa i prognoza vremena
+                </ui:define>
+
+                <ui:define name="top">
+                    NWTiS - Pregled adresa i prognoza vremena
+                </ui:define>
+
+                <ui:define name="left">
+                    <h:form>   
+                        <h:commandLink value="#{m.logout}" action="#{prijavaBean.logout()}"/>
+                    </h:form>
+                </ui:define>
+
+                <ui:define name="content">
+                    <h:form id="obrazac">           
+
+                        <h:inputText id="novaAdresa" value="#{korisnikBean.novaAdresa}" size="50"/>
+                        <h:commandButton value=" #{m.dodaj_adresu} " action="#{korisnikBean.dodajNovuAdresu()}">
+                            <f:ajax execute="novaAdresa" render="popisadresa prikazodgovora"/>
+                        </h:commandButton>
+
+                        <h:commandButton value=" #{m.sve_adrese} " action="#{korisnikBean.fetchAllAddresses()}">
+                            <f:ajax execute="" render="popisadresa"/>
+                        </h:commandButton>
+                        <h:commandButton value=" #{m.moje_adrese} " action="#{korisnikBean.fetchMyAddresses()}">
+                            <f:ajax execute="" render="popisadresa"/>
+                        </h:commandButton>
+
+                        <h:panelGrid columns="4">
+                            <h:panelGroup layout="block" style="height:500px"> 
+                                <h:selectOneListbox id="popisadresa" value="#{korisnikBean.odabranaAdresa}" size="10">
+                                    <f:selectItems value="#{korisnikBean.popisDodanihAdresa}"/>
+                                </h:selectOneListbox>
+                                <h:outputLabel id="prikazodgovora" value="#{korisnikBean.responseServer}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup layout="block"> 
+                                <h:panelGrid>
+                                    <h:commandButton value=" #{m.preuzmi_meteo} " action="#{korisnikBean.preuzmiMeteo()}">
+                                        <f:ajax execute="popisadresa" render="meteopodaci"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid>
+                                    <h:commandButton value=" #{m.sakrij_meteo} " action="#{korisnikBean.sakrijMeteo()}">
+                                        <f:ajax execute="" render="map meteopodaci"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid>
+                                    <h:commandButton value="  #{m.prikaz_prognoza} " action="#{korisnikBean.togglePrognoza()}" >
+                                        <f:ajax execute="" render="meteoTablica"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="meteopodaci" layout="block" style="visibility: #{korisnikBean.prikazMape}">
+
+                                <h:outputLabel value="#{m.vrijeme}"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.weatherValue}"/> <br/>
+                                <h:outputLabel value="temp"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.temperatureValue}"/> <br/>
+                                <h:outputLabel value="temp min"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.temperatureMin}"/> <br/>
+                                <h:outputLabel value="temp max"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.temperatureMax}"/> <br/>
+                                <h:outputLabel value="#{m.vjetar_smjer}"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.windDirectionValue}"/> <br/>
+                                <h:outputLabel value="#{m.vjetar_brzina}"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.windSpeedValue}"/> <br/>
+                                <h:outputLabel value="#{m.vlaznost}"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.humidityValue}"/> <br/>
+                                <h:outputLabel value="#{m.tlak}"/>: <h:outputLabel value="#{korisnikBean.zadnjiMeteoPodaci.pressureValue}"/> <br/>
+                            </h:panelGroup>
+
+
+                        </h:panelGrid>
+                        <br/>
+                        <br/>
+                        <br/>
+
+
+                        <h:dataTable id="meteoTablica" value="#{korisnikBean.listaMeteoPrognoza}" var="mp" style="visibility:  #{korisnikBean.prikazPrognoza}">
+                            <h:column>
+                                <f:facet name="header">#{m.vrijeme}</f:facet>
+                                <h:outputText value="#{mp.weatherValue}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Temp</f:facet>
+                                <h:outputText value="#{mp.temperatureValue}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.vlaznost}</f:facet>
+                                <h:outputText value="#{mp.humidityValue}"/></h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.tlak}</f:facet>
+                                <h:outputText value="#{mp.pressureValue}"/></h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.prognoza_za}</f:facet>
+                                <h:outputText value="#{mp.lastUpdate}"/></h:column>
+                        </h:dataTable>
+                    </h:form>
+
+                </ui:define>
+
+            </ui:composition>
+        </h:body>
+    </f:view>
+</html>
+

@@ -1,0 +1,11 @@
+intervalProvjereSanducica=30
+nwtisporuka_predmet=nw
+mailserver=127.0.0.1
+IMAPport=143
+mailuser=dvertovs_admin@nwtis.nastava.foi.hr
+mailpass=a
+folderuspjesne=NW_USP
+folderneuspjesne=NW_NEUSP
+folderneispravne=NW_NEISP
+primitivniPosluziteljAdresa=127.0.0.1
+portPrimitivnogPosluzitelja=1203

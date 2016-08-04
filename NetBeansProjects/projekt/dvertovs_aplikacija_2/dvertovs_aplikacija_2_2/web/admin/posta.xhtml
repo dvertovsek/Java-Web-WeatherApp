@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.vazeciJezik}">
+        <h:head>
+            <title>email</title>
+        </h:head>
+        <h1>email</h1>
+        <h:body>
+            <h:form>
+                <h:selectOneRadio id="selectedfolder" value="#{adminBean.selectedFolder}">
+                    <f:selectItems value="#{adminBean.foldersList}"/>
+                </h:selectOneRadio><br/>
+                <h:commandLink value="#{m.index_potvrdi}" action="#{adminBean.selectFolder()}">
+                    <f:ajax execute="selectedfolder" render="prikazporuka"/>
+                </h:commandLink><br/>
+                <h:commandLink value="#{m.brisi}" action="#{adminBean.deleteFolder()}">
+                    <f:ajax execute="selectedfolder" render="prikazporuka"/>
+                </h:commandLink><br/>
+
+                <br/>
+                <h:dataTable id="prikazporuka" value="#{adminBean.listapor}" var="por" >
+                    <h:column>
+                        <f:facet name="header">#{m.posiljatelj}</f:facet>
+                        <h:outputText value="#{por.from}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{m.predmet}</f:facet>
+                        <h:outputText value="#{por.subject}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{m.tekst}</f:facet>
+                        <h:outputText value="#{por.text}" />
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+

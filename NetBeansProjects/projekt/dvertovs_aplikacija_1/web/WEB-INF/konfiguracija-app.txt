@@ -1,0 +1,10 @@
+intervalDozvoljenKorisnicima=30
+kvotaZahtjeva=40
+intervalPreuzimanjaMeteo=30
+portPrimitivnogPosluzitelja=1203
+brojDretviPrimitivnogPosluzitelja=5
+OWMAppID=ac5153fcd4854aab008bc02dc35f139f
+posiljateljPoruke=Stat_NWTiS
+predmetPoruke=nw
+primateljPoruke=dvertovs_admin@nwtis.nastava.foi.hr
+stranicenje=5

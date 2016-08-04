@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.vazeciJezik}">
+        <h:head>
+            <title>#{m.admin}</title>
+        </h:head>
+        <h1>#{m.index_registracija}</h1>
+        <h:body>
+            <h:form>
+                <h:commandLink value="#{m.admin_upravljanjeSS}" action="upravljanjeSS"/><br/>
+                <h:commandLink value="#{m.admin_pregledzahtjeva}" action="pregledzahtjeva"/><br/><br/>
+                <h:commandLink value="#{m.admin_promjenakategorije}" action="promjenakategorije"/><br/><br/>
+                <h:commandLink value="email" action="posta"/><br/><br/>
+                <h:commandLink value="#{m.admin_dnevnik}" action="dnevnik"/><br/><br/>
+                <h:commandLink value="#{m.logout}" action="#{prijavaBean.logout()}"/><br/><br/>
+                <br/>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+

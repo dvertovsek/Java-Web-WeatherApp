@@ -1,0 +1,11 @@
+adresaPosluzitelj=127.0.0.1
+IMAPPort=143
+adresaInbox=darijanpero123456@nwtis.nastava.foi.hr
+passwordInbox=12345
+intervalProvjereSanducica=10
+subjectKljucnaRijec=NWTiS_naredba
+direktorijZaSpremanjeWebsite=NWTiS_podaci
+direktorijZaSpremanjeOstalih=NWTiS_OTHERMSGS
+direktorijZaSpremanjeIspravnih=NWTiS_MESSAGESCORR
+administratorEmail=dvertovs_admin@nwtis.nastava.foi.hr
+administratorSubject=NWTiS Statistika

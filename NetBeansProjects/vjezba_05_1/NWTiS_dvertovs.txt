@@ -1,0 +1,10 @@
+#NWTiS dvertovs - Thu Mar 24 16:03:14 CET 2016
+#Thu Mar 24 16:03:14 CET 2016
+6=Mara
+5=Bara
+4=Jozo
+3=Ivo
+2=Mato
+1=Pero
+8=Sara
+7=Dara

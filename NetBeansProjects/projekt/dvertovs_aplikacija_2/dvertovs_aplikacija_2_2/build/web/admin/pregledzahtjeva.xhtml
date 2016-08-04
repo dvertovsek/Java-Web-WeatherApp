@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{lokalizacija.vazeciJezik}">
+        <h:head>
+            <title>#{m.admin_pregledzahtjeva}</title>
+        </h:head>
+        <h1>#{m.admin_pregledzahtjeva}</h1>
+        <h:body>
+            <h:form>
+                <h:selectOneRadio value="#{adminBean.command}">
+                    <f:selectItems value="#{adminBean.usersWaiting}"/>
+                </h:selectOneRadio><br/>
+                <h:commandLink value="#{m.posalji}" action="#{adminBean.accept()}"/><br/>
+                <h:commandLink value="#{m.admin_odbij}" action="#{adminBean.decline()}"/><br/><br/><br/><br/><br/>
+                #{adminBean.response}
+                <br/>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+
